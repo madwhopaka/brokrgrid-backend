@@ -1,41 +1,31 @@
 import { Sequelize } from 'sequelize'
-import configFile from '../../../config/dbConfig.js'
-import UserModel from './User.js'
+import sequelize from '../config/db.js'
+import Organization from './Organization.js'
+import User from './User.js'
+import Lead from './Lead.js'
 import { logger } from '../../support/logger.js'
 
-const env = process.env.NODE_ENV || 'development'
-const config = configFile[env]
 const db = {}
 
-let sequelize
+db.Organization = Organization
+db.User = User
+db.Lead = Lead
 
-if (config.use_env_variable) {
-  const dbUrl = process.env[config.use_env_variable] || 'postgresql://neondb_owner:npg_2bPwyIL4KJvE@ep-late-dream-an2x7oke-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+Organization.hasMany(User, { foreignKey: 'organization_id' })
+User.belongsTo(Organization, { foreignKey: 'organization_id' })
 
-  if (!dbUrl) {
-    throw new Error(`Environment variable ${config.use_env_variable} is not set`)
-  }
+// Organization → Leads
+Organization.hasMany(Lead, { foreignKey: 'organization_id' })
+Lead.belongsTo(Organization, { foreignKey: 'organization_id' })
 
-  sequelize = new Sequelize(dbUrl, {
-    dialect: 'postgres',
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    },
-    logging: (msg) => logger.debug(msg)
-  })
-} else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    process.env.DB_PASSWORD,
-    config
-  )
-}
+// User → Leads (assigned_to)
+User.hasMany(Lead, { foreignKey: 'assigned_to', as: 'assignedLeads' })
+Lead.belongsTo(User, { foreignKey: 'assigned_to', as: 'assignee' })
 
-db.User = UserModel(sequelize, Sequelize.DataTypes)
+// User → Leads (added_by)
+User.hasMany(Lead, { foreignKey: 'added_by', as: 'createdLeads' })
+Lead.belongsTo(User, { foreignKey: 'added_by', as: 'creator' })
+
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
@@ -57,4 +47,5 @@ export async function initDB () {
   }
 }
 
+export default db
 export { sequelize, Sequelize }

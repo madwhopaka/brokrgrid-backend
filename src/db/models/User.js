@@ -1,99 +1,90 @@
-/* eslint-disable no-param-reassign */
-import { Model } from 'sequelize'
-import bcrypt from 'bcryptjs'
+// models/user.model.js
+import { DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
 
-/**
- * User model definition.
- *
- * @param {import('sequelize').Sequelize} sequelize - The Sequelize instance.
- * @param {import('sequelize/types')} DataTypes - The Sequelize DataTypes.
- * @returns {typeof Model} - The User model.
- */
-const UserModel = (sequelize, DataTypes) => {
-  /**
-   * User class extending Sequelize Model.
-   */
-  class User extends Model {
-    /**
-     * Associate models.
-     *
-     * @param {object} models - The models to associate.
-     */
-    static associate (models) {
-      // define association here
-      if (models.Student) {
-        models.User.hasOne(models.Student, {
-          foreignKey: 'userId'
-        })
-      }
-    }
-
-    /**
-     * Override toJSON method to exclude password.
-     *
-     * @returns {object} - The user object without the password.
-     */
-    toJSON () {
-      const user = { ...this.dataValues }
-      delete user.password
-      return user
-    }
-  }
-
-  User.init(
-    {
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notNull: true,
-          notEmpty: true,
-          is: /^[6-9]\d{9}$/
-        }
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notNull: true,
-          notEmpty: true
-        }
-      },
-      isDeleted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      },
-      role: {
-        type: DataTypes.STRING,
-        defaultValue: 'Student',
-        allowNull: false,
-        validate: {
-          notNull: true,
-          notEmpty: true,
-          isIn: [['Student', 'Teacher']]
-        }
-      }
+const User = sequelize.define(
+  "User",
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-    {
-      sequelize,
-      schema: 'NITTI',
-      modelName: 'User',
-      hooks: {
-        /**
-         * Hash the password before validating the user.
-         *
-         * @param {User} user - The user instance.
-         */
-        beforeValidate: async (user) => {
-          if (user.password) {
-            user.password = await bcrypt.hash(user.password, 8)
-          }
-        }
-      }
-    }
-  )
 
-  return User
-}
+    organization_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
 
-export default UserModel
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: true,
+      },
+    },
+
+    phone: DataTypes.STRING,
+
+    address: DataTypes.TEXT,
+
+    role: {
+      type: DataTypes.ENUM("admin", "member"),
+      allowNull: false,
+    },
+
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
+    is_verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
+    first_login: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+
+    password: {
+      type: DataTypes.TEXT,
+      field: "password_hash",
+    },
+
+    last_login_at: DataTypes.DATE,
+
+    invited_by: {
+      type: DataTypes.UUID,
+    },
+
+    invite_token: DataTypes.TEXT,
+
+    profile_image_url: DataTypes.TEXT,
+
+    deleted_at: DataTypes.DATE,
+  },
+  {
+    tableName: "users",
+    timestamps: true,
+    paranoid: true,
+    underscored: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ["email", "organization_id"],
+      },
+      {
+        unique: true,
+        fields: ["phone", "organization_id"],
+      },
+    ],
+  }
+);
+
+export default User;
