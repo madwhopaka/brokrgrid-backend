@@ -13,12 +13,14 @@ const routes = [
     path: '/health',
     route: AppHealthRoutes
   }
+
 ]
 
 /**
  * Register routes with the app
  * @param {object} app - The Express app object
  */
+
 const registerRoutes = (app) => {
   routes.forEach(({ path, route, excludeAPIPrefix }) => {
     // If excludeAPIPrefix is true, use the path as is.

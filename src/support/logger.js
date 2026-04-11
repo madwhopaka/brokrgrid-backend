@@ -4,7 +4,7 @@ import expressWinston from 'express-winston'
 import { readJsonFileSync } from '../utils/helper.js'
 
 // Example usage of the helper function
-const packageName = readJsonFileSync('../package.json')
+const packageName = readJsonFileSync('package.json')
 
 // Log formatter function
 const logFormatter = winston.format.printf((info) => {
@@ -66,19 +66,14 @@ if (config.NODE_ENV === 'production') {
 const requestLogger = expressWinston.logger({
   transports: [new winston.transports.Console()],
   format: winston.format.combine(
-    winston.format.json(),
-    winston.format.prettyPrint()
+    winston.format.timestamp(),
+    winston.format.json()
   ),
-  meta: true,
-  msg: 'HTTP {{req.method}} {{req.url}}',
-  expressFormat: true,
+  // meta: true,
+  meta: false,
+  msg: 'HTTP {{req.method}} {{req.route?.path || req.url}} - {{res.statusCode}}',
+  expressFormat: false,
   colorize: false,
-  /**
-   * A function that always returns `false`.
-   * @param {object} _req - The request object.
-   * @param {object} _res - The response object.
-   * @returns {boolean} - Always returns `false`.
-   */
   ignoreRoute (_req, _res) {
     return false
   }

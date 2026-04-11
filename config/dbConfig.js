@@ -1,8 +1,6 @@
 const config = {
   development: {
-    username: 'mealmate_dev',
-    database: 'mealmate',
-    host: '127.0.0.1',
+    use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
     operatorsAliases: 0
   },

@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { requestLogger } from './support/logger.js'
+import { logger, requestLogger } from './support/logger.js'
 import { errorHandler, badJsonHandler, notFoundHandler } from './middlewares/index.js'
 import loadRoutes from './loaders/routes.js'
 import './loaders/config.js'
@@ -10,24 +10,19 @@ import csurf from 'csurf'
 const app = express()
 
 /**
- * Enable CORS
- */
-app.use(cors())
-
-/**
  * Set up security headers.
  */
 app.use(helmet())
 
 /**
+ * Enable CORS
+ */
+app.use(cors())
+
+/**
  * Set up CSRF protection.
  */
 app.use(csurf())
-
-/**
- * Log requests
- */
-app.use(requestLogger)
 
 /**
  * Parse JSON body
@@ -40,9 +35,19 @@ app.use(express.json())
 app.use(badJsonHandler)
 
 /**
+ * Log requests
+ */
+app.use(requestLogger)
+
+/**
  * Load routes
  */
 loadRoutes(app)
+
+app.get('/', (req, res) => {
+  logger.info('Welcome to the BrokrGrid Backend')
+  res.json({ message: 'Welcome to the BrokrGrid Backend' })
+})
 
 /**
  * Handle 404 not found error
