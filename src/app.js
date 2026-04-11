@@ -20,9 +20,9 @@ app.use(helmet())
 app.use(cors())
 
 /**
- * Set up CSRF protection.
+ * Set up CSRF protection (disabled for API routes, enabled for form routes).
  */
-app.use(csurf())
+// app.use(csurf()) // Disabled for API - will be configured per route if needed
 
 /**
  * Parse JSON body

@@ -16,6 +16,12 @@ export default ({
   makeExpressCallback
 }) => {
   router.post(
+    '/signup',
+    makeValidatorCallback(AuthValidator.validateSignup),
+    makeExpressCallback(AuthController.signup)
+  )
+
+  router.post(
     '/login',
     makeValidatorCallback(AuthValidator.validateLogin),
     makeExpressCallback(AuthController.login)

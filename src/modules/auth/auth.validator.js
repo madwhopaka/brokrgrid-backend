@@ -10,6 +10,34 @@ const options = {
 
 export default {
   /**
+   * Validates a signup request with user and organization data.
+   * @param {object} httpRequest - The HTTP request object.
+   * @param {object} httpRequest.body - The request body.
+   * @returns {object} - The validation result.
+   */
+  validateSignup: (httpRequest) => {
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+      name: Joi.string().min(3).max(50).required(),
+      phone: Joi.string()
+        .pattern(/^[6-9]\d{9}$/)
+        .required()
+        .messages({
+          'string.pattern.base': 'Phone must be a valid 10-digit number starting with 6-9'
+        }),
+      password: Joi.string().min(8).max(20).required(),
+      organization_name: Joi.string().min(3).max(255).required(),
+      organization_slug: Joi.string().min(3).max(255).required(),
+      address: Joi.string().required(),
+      city: Joi.string().max(100).required(),
+      state: Joi.string().max(100).required(),
+      country: Joi.string().max(100).required(),
+      organization_phone: Joi.string().max(20).required()
+    })
+    return schema.validate(httpRequest.body, options)
+  },
+
+  /**
    * Validates a login request.
    * @param {object} httpRequest - The HTTP request object.
    * @param {object} httpRequest.body - The request body.
