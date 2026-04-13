@@ -33,7 +33,6 @@ const registerRoutes = (app) => {
       .replace(/\/+$/, '')
     const apiPrefix = normalizedPrefix ? `/${normalizedPrefix}` : ''
     // If excludeAPIPrefix is true, use the path as is.
-    // Otherwise, prepend the API_PREFIX to the path.
     const routePath = excludeAPIPrefix ? path : apiPrefix + path
     // Mount the route on the app using the determined route path.
     app.use(routePath, route)

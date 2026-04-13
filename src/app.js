@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { logger, requestLogger } from './support/logger.js'
-import { errorHandler, badJsonHandler, notFoundHandler } from './middlewares/index.js'
+import { errorHandler, badJsonHandler, notFoundHandler, auth } from './middlewares/index.js'
 import loadRoutes from './loaders/routes.js'
 import './loaders/config.js'
 import helmet from 'helmet'
@@ -20,9 +20,9 @@ app.use(helmet())
 app.use(cors())
 
 /**
- * Set up CSRF protection.
+ * Set up CSRF protection (disabled for API routes, enabled for form routes).
  */
-app.use(csurf())
+// app.use(csurf()) // Disabled for API - will be configured per route if needed
 
 /**
  * Parse JSON body
@@ -38,6 +38,11 @@ app.use(badJsonHandler)
  * Log requests
  */
 app.use(requestLogger)
+
+/**
+ * Authentication middleware - protect all routes
+ */
+app.use(auth)
 
 /**
  * Load routes

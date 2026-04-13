@@ -14,6 +14,21 @@ const UserService = {
     })
 
     return users
+  },
+
+  /**
+   * Fetches a user by ID.
+   * @param {string|number} userId
+   * @returns {Promise<object>}
+   */
+  doGetUser: async (userId) => {
+    const user = await User.findByPk(userId, {
+      attributes: {
+        exclude: ['password']
+      }
+    })
+
+    return user
   }
 }
 

@@ -13,7 +13,7 @@ const gracefulShutdown = async (server, afterShutdown = () => process.exit(0)) =
     logger.info('Closed database connection!')
 
     await new Promise((resolve, reject) => {
-      server.stop((err) => {
+      server.close((err) => {
         if (err) return reject(err)
         resolve()
       })

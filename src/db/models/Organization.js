@@ -1,24 +1,24 @@
 // models/organization.model.js
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
+import { DataTypes } from 'sequelize'
+import sequelize from '../config/db.js'
 
 const Organization = sequelize.define(
-  "Organization",
+  'Organization',
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
+      primaryKey: true
     },
 
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
 
     slug: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: true
     },
 
     address: DataTypes.TEXT,
@@ -29,40 +29,38 @@ const Organization = sequelize.define(
     phone_number: DataTypes.STRING,
     email: DataTypes.STRING,
 
-    logo_url: DataTypes.TEXT,
-
     is_active: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: true
     },
 
     members_count: {
       type: DataTypes.INTEGER,
-      defaultValue: 0,
+      defaultValue: 0
     },
 
     created_by: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID
     },
 
     plan: {
       type: DataTypes.STRING,
-      defaultValue: "free",
+      defaultValue: 'free'
     },
 
     subscription_status: {
       type: DataTypes.STRING,
-      defaultValue: "active",
+      defaultValue: 'active'
     },
 
-    deleted_at: DataTypes.DATE,
+    deleted_at: DataTypes.DATE
   },
   {
-    tableName: "organizations",
+    tableName: 'organizations',
     timestamps: true,
     paranoid: true, // enables soft delete
-    underscored: true,
+    underscored: true
   }
-);
+)
 
-export default Organization;
+export default Organization

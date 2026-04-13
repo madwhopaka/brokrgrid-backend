@@ -14,7 +14,7 @@ describe('gracefulShutdown', () => {
 
   beforeEach(() => {
     server = {
-      close: jest.fn()
+      close: jest.fn((callback) => callback())
     }
     exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {})
     sequelizeCloseSpy = jest.spyOn(sequelize, 'close')
@@ -38,11 +38,11 @@ describe('gracefulShutdown', () => {
    */
   it('should close the server and database connections and exit the process', async () => {
     expect.assertions(3)
-    await gracefulShutdown(server)
     sequelizeCloseSpy.mockResolvedValueOnce()
+    await gracefulShutdown(server)
     expect(sequelizeCloseSpy).toHaveBeenCalledTimes(1)
     expect(loggerInfoSpy).toHaveBeenCalledWith('Closed database connection!')
-    expect(exitSpy).toHaveBeenCalledWith()
+    expect(exitSpy).toHaveBeenCalledWith(0)
   })
 
   /**

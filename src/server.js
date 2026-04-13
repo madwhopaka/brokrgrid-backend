@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 import http from 'http'
 import app from './app.js'
 import normalizePort from './utils/normalize-port.js'

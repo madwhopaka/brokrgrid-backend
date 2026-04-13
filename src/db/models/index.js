@@ -26,7 +26,6 @@ Lead.belongsTo(User, { foreignKey: 'assigned_to', as: 'assignee' })
 User.hasMany(Lead, { foreignKey: 'added_by', as: 'createdLeads' })
 Lead.belongsTo(User, { foreignKey: 'added_by', as: 'creator' })
 
-
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db)
