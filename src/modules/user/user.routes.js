@@ -11,5 +11,6 @@ export default ({
   makeExpressCallback
 }) => {
   router.get('/', makeExpressCallback(UserController.getUsers))
+  router.get('/:userId', makeExpressCallback(UserController.getUser))
   return router
 }

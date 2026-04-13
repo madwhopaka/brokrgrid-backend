@@ -18,13 +18,13 @@ const router = Router()
  * @returns {Router} - The configured router.
  */
 const routes = createRoutes({
-	router,
-	UserController,
-	makeExpressCallback
+  router,
+  UserController,
+  makeExpressCallback
 })
 
 export {
-	UserController,
-	UserService,
-	routes as UserRoutes
+  UserController,
+  UserService,
+  routes as UserRoutes
 }

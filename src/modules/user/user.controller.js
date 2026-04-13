@@ -10,6 +10,17 @@ const UserController = {
   getUsers: async (_httpRequest) => {
     const usersData = await UserService.doGetUsers()
     return generateResponse(usersData)
+  },
+
+  /**
+   * Returns a user by ID.
+   * @param {ExpressRequest} httpRequest incoming request
+   * @returns {Promise<ControllerResponse>}
+   */
+  getUser: async (httpRequest) => {
+    const { userId } = httpRequest.params
+    const userData = await UserService.doGetUser(userId)
+    return generateResponse(userData)
   }
 }
 

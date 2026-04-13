@@ -28,11 +28,11 @@ export default {
       password: Joi.string().min(8).max(20).required(),
       organization_name: Joi.string().min(3).max(255).required(),
       organization_slug: Joi.string().min(3).max(255).required(),
-      address: Joi.string().required(),
-      city: Joi.string().max(100).required(),
-      state: Joi.string().max(100).required(),
-      country: Joi.string().max(100).required(),
-      organization_phone: Joi.string().max(20).required()
+      address: Joi.string(),
+      city: Joi.string().max(100),
+      state: Joi.string().max(100),
+      country: Joi.string().max(100),
+      organization_phone: Joi.string().max(20)
     })
     return schema.validate(httpRequest.body, options)
   },
@@ -53,7 +53,7 @@ export default {
         .messages({
           'string.pattern.base': 'Provide valid phone number!'
         }),
-      password: Joi.string().min(8).max(20).alphanum().required()
+      password: Joi.string().min(8).max(20).required()
     })
     return schema.validate(httpRequest.body, options)
   }

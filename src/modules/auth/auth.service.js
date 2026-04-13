@@ -126,15 +126,46 @@ const AuthService = {
 
     const payload = {
       userId: user.id,
-      role: user.role
+      role: user.role,
+      organizationId: user.organization_id
     }
 
     const accessToken = await generateJWT({
       payload
     })
+    
+    // Get organization data
+    const organization = await Organization.findByPk(user.organization_id)
+
     return {
       accessToken,
-      ...payload
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+        is_active: user.is_active,
+        is_verified: user.is_verified,
+        first_login: user.first_login,
+        last_login_at: user.last_login_at,
+        profile_image_url: user.profile_image_url,
+        organization_id: user.organization_id,
+        created_at: user.created_at,
+        updated_at: user.updated_at
+      },
+      organization: {
+        id: organization.id,
+        name: organization.name,
+        slug: organization.slug,
+        email: organization.email,
+        phone_number: organization.phone_number,
+        address: organization.address,
+        city: organization.city,
+        state: organization.state,
+        country: organization.country
+      }
     }
   }
 }
