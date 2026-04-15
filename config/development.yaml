@@ -4,3 +4,18 @@ REFRESH_TOKEN_EXPIRES_IN: 7d
 JWT_ACCESS_TOKEN_SECRET: "----- YOUR KEY -----"
 JWT_REFRESH_TOKEN_SECRET: "----- YOUR KEY -----"
 DATABASE_URL: "postgresql://neondb_owner:npg_2bPwyIL4KJvE@ep-late-dream-an2x7oke-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+
+# Redis Configuration for Development (Uses Redis Cloud)
+redis:
+  url: redis://:EzTUqJGCZNKkQI8TflJm1RdzJFLmnLD2@redis-19893.crce283.ap-south-1-2.ec2.cloud.redislabs.com:19893
+  db: 0
+  connectTimeout: 10000
+  keepAlive: true
+
+# Mail Configuration for Development
+mail:
+  host: smtp.gmail.com
+  port: 587
+  secure: false
+  from: ${MAIL_FROM}
+  password: ${MAIL_PASSWORD}

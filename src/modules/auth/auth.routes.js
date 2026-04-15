@@ -26,5 +26,16 @@ export default ({
     makeValidatorCallback(AuthValidator.validateLogin),
     makeExpressCallback(AuthController.login)
   )
+
+  router.post(
+    '/send-otp',
+    makeExpressCallback(AuthController.sendOTP)
+  )
+
+  router.post(
+    '/verify-otp',
+    makeExpressCallback(AuthController.verifyOTP)
+  )
+
   return router
 }

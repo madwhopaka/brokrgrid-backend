@@ -5,6 +5,7 @@ import badJsonHandler from './validate-json.js'
 import notFoundHandler from './not-found-error.js'
 import makeExpressCallback from './express-callback.js'
 import makeValidatorCallback from './validator-callback.js'
+import protectedRoute, { protectedRouteWithRole } from './protected-route.js'
 
 export {
   auth,
@@ -13,5 +14,7 @@ export {
   badJsonHandler,
   notFoundHandler,
   makeExpressCallback,
-  makeValidatorCallback
+  makeValidatorCallback,
+  protectedRoute,
+  protectedRouteWithRole
 }

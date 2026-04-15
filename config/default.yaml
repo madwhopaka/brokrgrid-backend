@@ -4,3 +4,17 @@ JWT_SIGN_OPTIONS:
   audience: https://example.in
   expiresIn: 15d
 API_PREFIX: api/v1
+
+# Redis Configuration
+redis:
+  url: redis://localhost:6379
+  db: 0
+  connectTimeout: 10000
+  keepAlive: true
+
+# Mail Configuration (SMTP)
+mail:
+  host: smtp.gmail.com
+  port: 587
+  secure: false
+  from: noreply@brokergrid.com

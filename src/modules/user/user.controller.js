@@ -21,6 +21,18 @@ const UserController = {
     const { userId } = httpRequest.params
     const userData = await UserService.doGetUser(userId)
     return generateResponse(userData)
+  },
+
+  /**
+   * Updates user details (name, address, profile image, etc).
+   * @param {ExpressRequest} httpRequest incoming request
+   * @returns {Promise<ControllerResponse>}
+   */
+  updateUser: async (httpRequest) => {
+    const { userId } = httpRequest.params
+    const updateData = httpRequest.body
+    const userData = await UserService.doUpdateUser(userId, updateData)
+    return generateResponse(userData)
   }
 }
 
