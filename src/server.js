@@ -1,3 +1,4 @@
+import 'dotenv/config'
 /* eslint-disable space-before-function-paren */
 import http from 'http'
 import app from './app.js'
@@ -5,6 +6,7 @@ import normalizePort from './utils/normalize-port.js'
 import gracefulShutdown from './utils/graceful-shutdown.js'
 import { logger } from './support/logger.js'
 import { initDB } from './db/models/index.js'
+import { getRedisClient } from './support/redis.js'
 
 /* eslint-disable no-console */
 
@@ -16,6 +18,16 @@ async function startServer() {
    * Initialize database connection
    */
   await initDB()
+
+  /**
+   * Initialize Redis connection
+   */
+  try {
+    await getRedisClient()
+  } catch (error) {
+    logger.error('Redis initialization failed:', error.message)
+    logger.warn('Continuing without Redis - some features may not work')
+  }
 
   /**
    * Get port from environment and store in Express.

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { makeExpressCallback } from '../../middlewares/index.js'
+import { makeExpressCallback, protectedRoute } from '../../middlewares/index.js'
 import UserService from './user.service.js'
 import UserController from './user.controller.js'
 import createRoutes from './user.routes.js'
@@ -15,12 +15,14 @@ const router = Router()
  * @param {Router} dependencies.router - The Express router.
  * @param {Object} dependencies.UserController - The user controller.
  * @param {Function} dependencies.makeExpressCallback - Middleware for handling Express callbacks.
+ * @param {Function} dependencies.protectedRoute - Middleware for protecting routes with authentication.
  * @returns {Router} - The configured router.
  */
 const routes = createRoutes({
   router,
   UserController,
-  makeExpressCallback
+  makeExpressCallback,
+  protectedRoute
 })
 
 export {

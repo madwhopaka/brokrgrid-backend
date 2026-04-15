@@ -1,11 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import { logger, requestLogger } from './support/logger.js'
-import { errorHandler, badJsonHandler, notFoundHandler, auth } from './middlewares/index.js'
+import { errorHandler, badJsonHandler, notFoundHandler } from './middlewares/index.js'
 import loadRoutes from './loaders/routes.js'
 import './loaders/config.js'
 import helmet from 'helmet'
-import csurf from 'csurf'
 
 const app = express()
 
@@ -38,11 +37,6 @@ app.use(badJsonHandler)
  * Log requests
  */
 app.use(requestLogger)
-
-/**
- * Authentication middleware - protect all routes
- */
-app.use(auth)
 
 /**
  * Load routes
