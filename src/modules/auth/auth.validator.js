@@ -17,8 +17,9 @@ export default {
    */
   validateSignup: (httpRequest) => {
     const schema = Joi.object({
+      full_name: Joi.string().min(3).max(50),
+      name: Joi.string().min(3).max(50),
       email: Joi.string().email().required(),
-      name: Joi.string().min(3).max(50).required(),
       phone: Joi.string()
         .pattern(/^[6-9]\d{9}$/)
         .required()
@@ -26,14 +27,34 @@ export default {
           'string.pattern.base': 'Phone must be a valid 10-digit number starting with 6-9'
         }),
       password: Joi.string().min(8).max(20).required(),
-      organization_name: Joi.string().min(3).max(255).required(),
-      organization_slug: Joi.string().min(3).max(255).required(),
-      address: Joi.string(),
-      city: Joi.string().max(100),
-      state: Joi.string().max(100),
-      country: Joi.string().max(100),
-      organization_phone: Joi.string().max(20)
+      organization_name: Joi.string().min(3).max(255).required()
+    }).or('full_name', 'name').unknown(true)
+    return schema.validate(httpRequest.body, options)
+  },
+
+  validateVerifyOtp: (httpRequest) => {
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+      otp: Joi.string().length(6).pattern(/^\d{6}$/).required()
     })
+
+    return schema.validate(httpRequest.body, options)
+  },
+
+  validateResendOtp: (httpRequest) => {
+    const schema = Joi.object({
+      email: Joi.string().email().required()
+    })
+
+    return schema.validate(httpRequest.body, options)
+  },
+
+  validateChangeEmail: (httpRequest) => {
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+      new_email: Joi.string().email().required()
+    })
+
     return schema.validate(httpRequest.body, options)
   },
 

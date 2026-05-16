@@ -7,6 +7,7 @@ import gracefulShutdown from './utils/graceful-shutdown.js'
 import { logger } from './support/logger.js'
 import { initDB } from './db/models/index.js'
 import { getRedisClient } from './support/redis.js'
+import { startPendingSignupCleanupJob } from './modules/auth/pending-signup.job.js'
 
 /* eslint-disable no-console */
 
@@ -28,6 +29,8 @@ async function startServer() {
     logger.error('Redis initialization failed:', error.message)
     logger.warn('Continuing without Redis - some features may not work')
   }
+
+  startPendingSignupCleanupJob()
 
   /**
    * Get port from environment and store in Express.

@@ -47,6 +47,10 @@ const User = sequelize.define(
       defaultValue: false,
     },
 
+    email_verified_at: {
+      type: DataTypes.DATE,
+    },
+
     first_login: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,

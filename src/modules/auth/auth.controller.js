@@ -10,7 +10,7 @@ const AuthController = {
    * @returns {Promise.<ControllerResponse> }
    */
   signup: async (httpRequest) => {
-    const signupData = await AuthService.doSignup(httpRequest.body)
+    const signupData = await AuthService.doSignup(httpRequest)
     return generateResponse(signupData)
   },
 
@@ -34,7 +34,7 @@ const AuthController = {
    * @returns {Promise.<ControllerResponse> }
    */
   sendOTP: async (httpRequest) => {
-    const otpData = await AuthService.doSendOTP(httpRequest.body)
+    const otpData = await AuthService.doResendOtp(httpRequest)
     return generateResponse(otpData)
   },
 
@@ -46,8 +46,13 @@ const AuthController = {
    * @returns {Promise.<ControllerResponse> }
    */
   verifyOTP: async (httpRequest) => {
-    const verifyData = await AuthService.doVerifyOTP(httpRequest.body)
+    const verifyData = await AuthService.doVerifyOtp(httpRequest)
     return generateResponse(verifyData)
+  },
+
+  changeEmail: async (httpRequest) => {
+    const changeEmailData = await AuthService.doChangeEmail(httpRequest)
+    return generateResponse(changeEmailData)
   }
 }
 

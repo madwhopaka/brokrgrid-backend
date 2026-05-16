@@ -3,6 +3,7 @@ import sequelize from '../config/db.js'
 import Organization from './Organization.js'
 import User from './User.js'
 import Lead from './Lead.js'
+import PendingSignup from './PendingSignup.js'
 import { logger } from '../../support/logger.js'
 
 const db = {}
@@ -10,6 +11,7 @@ const db = {}
 db.Organization = Organization
 db.User = User
 db.Lead = Lead
+db.PendingSignup = PendingSignup
 
 Organization.hasMany(User, { foreignKey: 'organization_id' })
 User.belongsTo(Organization, { foreignKey: 'organization_id' })

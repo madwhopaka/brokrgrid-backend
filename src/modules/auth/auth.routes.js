@@ -22,19 +22,27 @@ export default ({
   )
 
   router.post(
-    '/login',
-    makeValidatorCallback(AuthValidator.validateLogin),
-    makeExpressCallback(AuthController.login)
+    '/verify-otp',
+    makeValidatorCallback(AuthValidator.validateVerifyOtp),
+    makeExpressCallback(AuthController.verifyOTP)
   )
 
   router.post(
-    '/send-otp',
+    '/resend-otp',
+    makeValidatorCallback(AuthValidator.validateResendOtp),
     makeExpressCallback(AuthController.sendOTP)
   )
 
   router.post(
-    '/verify-otp',
-    makeExpressCallback(AuthController.verifyOTP)
+    '/change-email',
+    makeValidatorCallback(AuthValidator.validateChangeEmail),
+    makeExpressCallback(AuthController.changeEmail)
+  )
+
+  router.post(
+    '/login',
+    makeValidatorCallback(AuthValidator.validateLogin),
+    makeExpressCallback(AuthController.login)
   )
 
   return router

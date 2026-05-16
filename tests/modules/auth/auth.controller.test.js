@@ -1,44 +1,48 @@
 import { faker } from '@faker-js/faker'
-import config from 'config'
 import AuthController from '../../../src/modules/auth/auth.controller'
 import AuthService from '../../../src/modules/auth/auth.service'
-import JwtService from '../../../src/modules/auth/jwt.service'
 
-/**
- * Tests for AuthController
- */
 describe('AuthController', () => {
-  const payload = {
-    userId: faker.datatype.uuid(),
-    role: 'User'
-  }
-
-  let jwtToken
-
-  /**
-   * Generate JWT token before all tests
-   */
-  beforeAll(async () => {
-    jwtToken = await JwtService.generateJWT({
-      payload,
-      secretKey: config.JWT_ACCESS_TOKEN_SECRET
-    })
-  })
-
-  /**
-   * Restore mocks after each test
-   */
   afterEach(() => {
     jest.restoreAllMocks()
   })
 
-  /**
-   * Tests for login method
-   */
+  describe('signup', () => {
+    it('should call the signup service with the full request object', async () => {
+      expect.assertions(2)
+
+      const httpRequest = {
+        body: {
+          full_name: faker.name.fullName(),
+          email: faker.internet.email().toLowerCase(),
+          phone: faker.phone.phoneNumber('##########'),
+          password: faker.internet.password(10),
+          organization_name: faker.company.name()
+        },
+        ip: '127.0.0.1'
+      }
+
+      const signupData = {
+        message: 'Verification code sent to email address'
+      }
+
+      const doSignupMock = jest.fn().mockResolvedValue(signupData)
+      AuthService.doSignup = doSignupMock
+
+      const result = await AuthController.signup(httpRequest)
+
+      expect(result).toEqual({
+        statusCode: 200,
+        data: signupData
+      })
+      expect(doSignupMock).toHaveBeenCalledWith(httpRequest)
+    })
+  })
+
   describe('login', () => {
     it('should login user and return token', async () => {
       expect.assertions(2)
-      // Arrange
+
       const httpRequest = {
         body: {
           phone: faker.phone.phoneNumber('##########'),
@@ -47,23 +51,20 @@ describe('AuthController', () => {
       }
 
       const loginData = {
-        ...payload,
-        accessToken: jwtToken
-      }
-
-      const expected = {
-        statusCode: 200,
-        data: loginData
+        userId: 'fake-id',
+        role: 'fake-role',
+        accessToken: 'fake-access-token'
       }
 
       const doLoginMock = jest.fn().mockResolvedValue(loginData)
       AuthService.doLogin = doLoginMock
 
-      // Act
       const result = await AuthController.login(httpRequest)
 
-      // Assert
-      expect(result).toEqual(expected)
+      expect(result).toEqual({
+        statusCode: 200,
+        data: loginData
+      })
       expect(doLoginMock).toHaveBeenCalledWith(httpRequest.body)
     })
   })
